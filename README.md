@@ -11,9 +11,10 @@ This repository showcases a **Potato Leaf Disease Classification** project. It u
 2. [Dataset](#dataset)
 3. [Methodology & Code Explanation](#methodology--code-explanation)
 4. [Results & Discussion](#results--discussion)
-5. [Usage](#usage)
-6. [Acknowledgments](#acknowledgments)
-7. [Disclaimer](#disclaimer)
+5. [Areas for Improvement](#areas-for-improvement)
+6. [Usage](#usage)
+7. [Acknowledgments](#acknowledgments)
+8. [Disclaimer](#disclaimer)
 
 ---
 
@@ -24,7 +25,7 @@ Potato diseases, such as **Early Blight** and **Late Blight**, are critical conc
 ### Key Objectives
 
 - **Demonstrate Transfer Learning**: Use MobileNetV2 trained on ImageNet and fine-tune it for potato leaf classification.
-- **Achieve Good Accuracy**: Obtain a classification accuracy of around **90%** on a three-class problem (Early Blight, Healthy, Late Blight).
+- **Achieve High Accuracy**: Obtain a classification accuracy of **~96.6%** on a three-class problem (Early Blight, Healthy, Late Blight).
 - **Showcase Data Augmentation**: Use transformations such as rotation, shift, and zoom to improve generalization.
 
 ---
@@ -55,7 +56,7 @@ Potato Disease Leaf Dataset
 
 - Each image is **256 × 256** pixels in `.jpg` format.
 - The background is distinct, so no segmentation step was required.
-- **Note**: For MobileNetV2, we typically resize images to **224 × 224** during the data loading process.
+- **Note**: For MobileNetV2, we resize images to **224 × 224** during the data loading process.
 
 ---
 
@@ -131,7 +132,7 @@ model.fit(train_generator, validation_data=val_generator, epochs=10)
 ```
 
 ### 5. **Evaluation**
-We then evaluate the model on the test set:
+We evaluate the model on the test set:
 
 ```python
 test_loss, test_acc = model.evaluate(test_generator)
@@ -143,17 +144,41 @@ print(f"Test Accuracy: {test_acc:.4f}")
 ## Results & Discussion
 
 After **20 total epochs** (10 with the base frozen, 10 with partial unfreezing):
-- **Test Accuracy** reached **~90%**.
+- **Test Accuracy** reached **~96.6%**.
 - This is a significant improvement over a simple CNN trained from scratch, which might only reach ~50–60%.
 
 **Why such improvement?**  
 - **Transfer learning** leverages pretrained features from ImageNet, enabling the model to adapt quickly to leaf disease patterns.  
 - **Data augmentation** helps prevent overfitting and improves generalization.
 
-### Next Steps
-- **Further Fine-Tuning**: Adjust the number of unfrozen layers and learning rates.
-- **Experiment with Other Architectures**: e.g., ResNet50, EfficientNet, etc.
-- **Additional Data**: More leaf images (or synthetic augmentation) could push accuracy even higher.
+---
+
+## Areas for Improvement
+
+While the model performs well, there are several areas where further improvements could be made:
+
+1. **Dataset Balance**:
+   - Verify that the dataset is balanced across all classes (Early Blight, Healthy, Late Blight). Imbalanced classes can lead to biased predictions.
+
+2. **Fine-Tuning Stability**:
+   - During fine-tuning, the validation accuracy fluctuated (e.g., from 96.4% to 91.1%). To stabilize training:
+     - Use a **lower learning rate** (e.g., `1e-5`) or implement **learning rate scheduling**.
+     - Unfreeze fewer layers (e.g., last 10-15 layers instead of 30) to reduce overfitting.
+
+3. **Image Resolution**:
+   - The original images are 256x256 but resized to 224x224. Experimenting with **256x256 input** (adjusting the model) might retain more details, though MobileNetV2 is optimized for 224x224.
+
+4. **Callbacks**:
+   - Add **early stopping** or **model checkpointing** to prevent overfitting and save the best model automatically.
+
+5. **Class Weights**:
+   - If classes are imbalanced, use `class_weight` in `model.fit()` to address bias.
+
+6. **Experiment with Other Architectures**:
+   - Try other architectures like **ResNet50**, **EfficientNet**, or **InceptionV3** to compare performance.
+
+7. **Additional Data**:
+   - Collect more data or use **synthetic data augmentation** techniques (e.g., GANs) to further improve generalization.
 
 ---
 
