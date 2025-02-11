@@ -1,4 +1,3 @@
-```markdown
 # Potato Leaf Disease Classification (Early Blight, Healthy, Late Blight)
 
 This repository showcases a **Potato Leaf Disease Classification** project. It uses a **transfer learning** approach with **MobileNetV2** to classify potato leaves into **Early Blight**, **Healthy**, or **Late Blight**. The dataset is taken from [Kaggle](https://www.kaggle.com/datasets/rizwan123456789/potato-disease-leaf-datasetpld/data).
@@ -182,5 +181,3 @@ After **20 total epochs** (10 with the base frozen, 10 with partial unfreezing):
 ## Disclaimer
 
 This project is **not** a formal or production-grade solution. It is an **exploration** conducted in collaboration with **ChatGPT** to demonstrate the potential of transfer learning for plant disease classification. Accuracy metrics and conclusions are **for demonstration purposes only** and may not fully represent real-world performance.
-
-```  
